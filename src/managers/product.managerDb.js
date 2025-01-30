@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import productoModel from "../model/product.model";
+import productoModel from "../model/product.model.js";
 
 
 class ProductManager{
@@ -25,7 +25,19 @@ class ProductManager{
         console.log('Hubo un error agregando el producto', error)
        }
 }
+
+    async encontrarProducto(_id){
+        try {
+            const buscarPorId = await productoModel.findById(_id)
+            return buscarPorId
+        }
+         catch (error) {
+            console.log('Hubo un error encontrando el producto por ID', error)
+        }
+    }
 }
+
+
 
 
 export default ProductManager
