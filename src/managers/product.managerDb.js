@@ -26,7 +26,16 @@ class ProductManager{
        }
 }
 
-    async encontrarProducto(_id){
+    async encontrarProducto(){
+        try {
+            const buscarProductoLimit = await productoModel.find()
+            return buscarProductoLimit.docs
+        } catch (error) {
+            console.log('Hubo un error al intentar de encontrar el producto', error)
+        }
+    }
+
+    async encontrarProductoPorID(_id){
         try {
             const buscarPorId = await productoModel.findById(_id)
             return buscarPorId
