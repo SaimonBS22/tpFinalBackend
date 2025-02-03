@@ -1,0 +1,12 @@
+.section-productos{
+    display: flex;
+    justify-content: center;
+    align-items: row;
+    flex-direction: column;
+    margin-left: 30%;
+}
+
+.div-parrafo{
+    display: flex;
+    flex-direction: row;
+}

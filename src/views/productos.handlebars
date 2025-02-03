@@ -1,19 +1,26 @@
+<section class="section-productos">
 <h1>Nuestros Productos</h1>
+
 
 <ul>
     {{#each products}}
         <Strong><li>Title: {{this.title}}</li></Strong>
         <li>Description: {{this.description}}</li>
+        <li>Precio: ${{this.price}}</li>
+        <li>Categoria: {{this.category}}</li>
     {{/each}}
 </ul>
 
+
 {{#if hasPrevPage}}
-    <a href='/inicio?page={{prevPage}}'>Anterior</a>
+    <a href='/products?page={{prevPage}}&sort={{currentSort}}'>Anterior</a>
 {{/if}}
 
 {{#if hasNextPage}}
-    <a href="/inicio?page={{nextPage}}">Siguiente</a>
+    <a href="/products?page={{nextPage}}&sort={{currentSort}}">Siguiente</a>
 {{/if}}
 
-
-<p>Pagina {{currentPage}} de {{totalPages}}</p>
+<div class="div-parrafo">
+<p class="parrafo">Pagina {{currentPage}} de {{totalPages}}</p>
+</div>
+</section>

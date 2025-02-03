@@ -29,9 +29,18 @@ class ProductManager{
     async encontrarProducto(){
         try {
             const buscarProductoLimit = await productoModel.find()
-            return buscarProductoLimit.docs
+            return buscarProductoLimit
         } catch (error) {
             console.log('Hubo un error al intentar de encontrar el producto', error)
+        }
+    }
+
+    async productoSort(){
+        try {
+            const sort = await productoModel.find().sort({price:1})
+            return sort
+        } catch (error) {
+            console.log("Hubo un error en el sort", error)
         }
     }
 
