@@ -10,13 +10,13 @@ viewsRouter.get("/", async (req, res)=>{
     try {
      const page = req.query.page || 1
      const sort = req.query.sort || 'asc'
+
      const limit = 5
      const products =  await productoModel.paginate({},{
         limit, 
         page,
         sort: {price: sort === 'asc' ? 1 :-1}
     })
-     const productSort = sort === 'asc' ? 'desc' : 'asc'
 
 
      const recuperarProducto = products.docs.map(product =>{
