@@ -35,15 +35,6 @@ class ProductManager{
         }
     }
 
-    async productoSort(){
-        try {
-            const sort = await productoModel.find().sort({price:1})
-            return sort
-        } catch (error) {
-            console.log("Hubo un error en el sort", error)
-        }
-    }
-
     async encontrarProductoPorID(_id){
         try {
             const buscarPorId = await productoModel.findById(_id)
