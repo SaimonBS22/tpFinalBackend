@@ -26,10 +26,37 @@ class ProductManager{
        }
 }
 
-    async encontrarProducto(){
+    async encontrarProducto({limit=5,page=4,sort,category } = {}){
         try {
-            const buscarProductoLimit = await productoModel.find()
-            return buscarProductoLimit
+
+
+            const productoCategory = {}
+            if(category){
+                productoQuery.category = category
+            }
+            const productoSort = {}
+                if(sort === "asc" || sort === "desc"){
+                    productoSort.price = sort === 'asc' ? 1: -1
+                }
+        
+
+            const totalProductos = await productoModel.countDocuments(productoCategory)
+            const totalPages = Math.ceil(totalProductos/limit)
+            const hasPrevPage = page > 1
+            const hasNextPage = page < totalPages
+
+            const buscarProducto = await productoModel.find(productoCategory).sort(productoSort).skip((page-1)*limit).limit(limit)
+            return {
+                docs:buscarProducto,
+                totalPages,
+                currentPage: page,
+                prevPage: hasPrevPage ? page - 1 : null,
+                nextPage: hasNextPage ? page + 1 : null,
+                hasPrevPage,
+                hasNextPage,
+                prevLink: buscarProducto.hasPrevPage ? `/products?limit=${limit}&page=${page - 1}&sort=${sort}&category=${category}` : null,
+                nextLink:buscarProducto.hasNextPage ? `/products?limit=${limit}&page=${page + 1}&sort=${sort}&category=${category}` : null,
+            }
         } catch (error) {
             console.log('Hubo un error al intentar de encontrar el producto', error)
         }

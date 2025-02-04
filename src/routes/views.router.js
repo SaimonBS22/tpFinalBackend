@@ -8,17 +8,13 @@ const manager = new ProductManager()
 
 viewsRouter.get("/", async (req, res)=>{
     try {
-     const page = req.query.page || 1
-     const sort = req.query.sort || 'asc'
-     const categoria = req.query.category ? req.query.category.split(',') : []
+    const { limit=5, page = 1, sort, query } = req.query
 
-     const filtro = categoria.length ? {category:{$in: categoria}} : {}
-
-     const limit = 5
-     const products =  await productoModel.paginate(filtro,{
-        limit, 
-        page,
-        sort: {price: sort === 'asc' ? 1 :-1},
+    const products = await manager.encontrarProducto({
+      limit: parseInt(limit) || 5,
+      page: parseInt(page) || 1,
+      sort,
+      query
     })
 
 
@@ -33,11 +29,8 @@ viewsRouter.get("/", async (req, res)=>{
         hasNextPage: products.hasNextPage,
         prevPage: products.prevPage,
         nextPage: products.nextPage,
-        currentPage: products.page,
+        currentPage: products.currentPage,
         totalPages: products.totalPages,
-        prevLink: products.hasPrevPage ? `/products?page=${products.prevPage}&sort=${sort}&category=${categoria.join(',')}` : null,
-        nextLink:products.hasNextPage ? `/products?page=${products.nextPage}&sort=${sort}&category=${categoria.join(',')}` : null,
-        currentSort: sort
      }
      )
     } catch (error) {
@@ -45,5 +38,20 @@ viewsRouter.get("/", async (req, res)=>{
     }
 })
 
+viewsRouter.get('/paginate',async (req, res)=>{
+   const paginacion= await productoModel.paginate({limit:5, page:4})
+   res.json({
+      success:'Exitosamente',
+        payload: paginacion.docs,
+        hasPrevPage: paginacion.hasPrevPage,
+        hasNextPage: paginacion.hasNextPage,
+        prevPage: paginacion.prevPage,
+        nextPage: paginacion.nextPage,
+        currentPage: paginacion.page,
+        totalPages: paginacion.totalPages,
+        prevLink: paginacion.hasPrevPage ? `/products?page=${paginacion.prevPage}&sort=${sort}&category=${categoria.join(',')}` : null,
+        nextLink:paginacion.hasNextPage ? `/products?page=${paginacion.nextPage}&sort=${sort}&category=${categoria.join(',')}` : null,
+   })
+})
 
 export default viewsRouter

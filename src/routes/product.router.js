@@ -6,19 +6,30 @@ const productRouter = Router()
 const manager = new ProductManager()
 
 productRouter.get('/products', async (req, res)=>{
-   const productos = await manager.encontrarProducto()
-   res.json({
-        success:'Exitosamente',
-        payload: productos,
-        hasPrevPage: productos.hasPrevPage,
-        hasNextPage: productos.hasNextPage,
-        prevPage: productos.prevPage,
-        nextPage: productos.nextPage,
-        currentPage: productos.page,
-        totalPages: productos.totalPages,
-        prevLink: productos.hasPrevPage ? `/products?page=${productos.prevPage}&sort=${sort}&category=${categoria.join(',')}` : null,
-        nextLink:productos.hasNextPage ? `/products?page=${productos.nextPage}&sort=${sort}&category=${categoria.join(',')}` : null,
-   })
+    try {
+        const {limit=5, page=4, sort, category} = req.query
+    
+        const productos = await manager.encontrarProducto({
+         limit,
+         page,
+         sort,
+         category
+        })
+        res.json({
+             success:'Exitosamente',
+             payload: productos,
+             hasPrevPage: productos.hasPrevPage,
+             hasNextPage: productos.hasNextPage,
+             prevPage: productos.prevPage,
+             nextPage: productos.nextPage,
+             currentPage: productos.page,
+             totalPages: productos.totalPages,
+             prevLink: productos.hasPrevPage ? `/products?limit=${limit}&page=${productos.prevPage}&sort=${sort}&&category=${category}` : null,
+             nextLink:productos.hasNextPage ? `/products?limit=${limit}&page=${productos.nextPage}&sort=${sort}&category=${category}` : null,
+        })
+    } catch (error) {
+        console.log('Hubo un error en productRouter', error)
+    }
 })
 
 
