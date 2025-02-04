@@ -28,11 +28,11 @@ class ProductManager{
 
     async encontrarProducto({limit=5,page=4,sort,category } = {}){
         try {
-
+            console.log('Parametros recibidos: ',{limit, page, sort, category})
 
             const productoCategory = {}
             if(category){
-                productoQuery.category = category
+                productoCategory.category = category
             }
             const productoSort = {}
                 if(sort === "asc" || sort === "desc"){
@@ -54,8 +54,9 @@ class ProductManager{
                 nextPage: hasNextPage ? page + 1 : null,
                 hasPrevPage,
                 hasNextPage,
-                prevLink: buscarProducto.hasPrevPage ? `/products?limit=${limit}&page=${page - 1}&sort=${sort}&category=${category}` : null,
-                nextLink:buscarProducto.hasNextPage ? `/products?limit=${limit}&page=${page + 1}&sort=${sort}&category=${category}` : null,
+                prevLink: hasPrevPage ? `/products?limit=${limit}&page=${page - 1}&sort=${sort}&category=${category}` : null,
+                nextLink: hasNextPage ? `/products?limit=${limit}&page=${page + 1}&sort=${sort}&category=${category}` : null,
+                currentSort: sort
             }
         } catch (error) {
             console.log('Hubo un error al intentar de encontrar el producto', error)

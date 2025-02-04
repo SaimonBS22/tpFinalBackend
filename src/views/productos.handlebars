@@ -13,11 +13,11 @@
 
 
 {{#if hasPrevPage}}
-    <a href='/products?limit={{limit}}&page={{prevPage}}&sort={{sort}}&query={{query}}'>Anterior</a>
+    <a href='/products?limit={{limit}}&page={{prevPage}}&sort={{currentSort}}&category={{category}}'>Anterior</a>
 {{/if}}
 
 {{#if hasNextPage}}
-    <a href="/products?limit={{limit}}&page={{nextPage}}&sort={{sort}}&query={{query}}">Siguiente</a>
+    <a href="/products?limit={{limit}}&page={{nextPage}}&sort={{currentSort}}&category={{category}}">Siguiente</a>
 {{/if}}
 
 <div class="div-parrafo">

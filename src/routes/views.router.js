@@ -8,13 +8,13 @@ const manager = new ProductManager()
 
 viewsRouter.get("/", async (req, res)=>{
     try {
-    const { limit=5, page = 1, sort, query } = req.query
+    const { limit=5, page = 1, sort, category } = req.query
 
     const products = await manager.encontrarProducto({
       limit: parseInt(limit) || 5,
       page: parseInt(page) || 1,
       sort,
-      query
+      category
     })
 
 
@@ -31,6 +31,7 @@ viewsRouter.get("/", async (req, res)=>{
         nextPage: products.nextPage,
         currentPage: products.currentPage,
         totalPages: products.totalPages,
+        currentSort: sort
      }
      )
     } catch (error) {

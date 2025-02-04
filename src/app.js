@@ -34,3 +34,4 @@ const manager = new ProductManager()
 
  app.use('/api', productRouter)
  app.use('/products', viewsRouter)
+

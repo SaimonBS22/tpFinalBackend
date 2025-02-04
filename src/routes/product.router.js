@@ -24,8 +24,9 @@ productRouter.get('/products', async (req, res)=>{
              nextPage: productos.nextPage,
              currentPage: productos.page,
              totalPages: productos.totalPages,
-             prevLink: productos.hasPrevPage ? `/products?limit=${limit}&page=${productos.prevPage}&sort=${sort}&&category=${category}` : null,
+             prevLink: productos.hasPrevPage ? `/products?limit=${limit}&page=${productos.prevPage}&sort=${sort}&category=${category}` : null,
              nextLink:productos.hasNextPage ? `/products?limit=${limit}&page=${productos.nextPage}&sort=${sort}&category=${category}` : null,
+             currentSort:sort
         })
     } catch (error) {
         console.log('Hubo un error en productRouter', error)
