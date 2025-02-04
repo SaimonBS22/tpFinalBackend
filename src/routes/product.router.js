@@ -9,7 +9,15 @@ productRouter.get('/products', async (req, res)=>{
    const productos = await manager.encontrarProducto()
    res.json({
         success:'Exitosamente',
-        payload: productos
+        payload: productos,
+        hasPrevPage: productos.hasPrevPage,
+        hasNextPage: productos.hasNextPage,
+        prevPage: productos.prevPage,
+        nextPage: productos.nextPage,
+        currentPage: productos.page,
+        totalPages: productos.totalPages,
+        prevLink: productos.hasPrevPage ? `/products?page=${productos.prevPage}&sort=${sort}&category=${categoria.join(',')}` : null,
+        nextLink:productos.hasNextPage ? `/products?page=${productos.nextPage}&sort=${sort}&category=${categoria.join(',')}` : null,
    })
 })
 
