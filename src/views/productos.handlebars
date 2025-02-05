@@ -4,10 +4,12 @@
 
 <ul>
     {{#each products}}
+    <hr>
         <Strong><li>Title: {{this.title}}</li></Strong>
         <li>Description: {{this.description}}</li>
         <li>Precio: ${{this.price}}</li>
         <li>Categoria: {{this.category}}</li>
+        <button>Agregar al carrito</button>
     {{/each}}
 </ul>
 

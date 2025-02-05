@@ -1,10 +1,9 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import { engine } from 'express-handlebars'
-import productoModel from './model/product.model.js'
-import ProductManager from './managers/product.managerDb.js'
 import productRouter from './routes/product.router.js'
 import viewsRouter from './routes/views.router.js'
+import cartRouter from './routes/cart.router.js'
 
 
  const app = express()
@@ -29,9 +28,8 @@ app.set("views", "./src/views")
 .then(()=>{console.log('Conectado a MongoDb')})
 .catch((err)=>{console.error('Hubo un error', err)})
 
-const manager = new ProductManager()
-
 
  app.use('/api', productRouter)
- app.use('/products', viewsRouter)
+ app.use('/', viewsRouter)
+ app.use('/api', cartRouter)
 

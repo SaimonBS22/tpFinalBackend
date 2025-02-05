@@ -1,10 +1,11 @@
 import {Router} from 'express'
 import productoModel from '../model/product.model.js'
 import ProductManager from '../managers/product.managerDb.js'
+import CartManager from '../managers/cart.managerDb.js'
 
 const viewsRouter = Router()
 const manager = new ProductManager()
-
+const cartManager = new CartManager()
 
 viewsRouter.get("/", async (req, res)=>{
     try {
@@ -53,6 +54,24 @@ viewsRouter.get('/paginate',async (req, res)=>{
         prevLink: paginacion.hasPrevPage ? `/products?page=${paginacion.prevPage}&sort=${sort}&category=${categoria.join(',')}` : null,
         nextLink:paginacion.hasNextPage ? `/products?page=${paginacion.nextPage}&sort=${sort}&category=${categoria.join(',')}` : null,
    })
+})
+
+viewsRouter.get('/cart/:cid', async (req, res)=>{
+      const cartId = req.params.cid
+   try {
+      const carrito = await cartManager.encontrarCarritoId(cartId)
+
+      const productoCarrito = carrito.productos.map(item=>({
+         producto: item.producto.toObject(),
+         quantity: item.quantity
+      }))
+      res.render('cart',{
+         productos: productoCarrito
+      })
+   } 
+   catch (error) {
+      console.log('Hubo un error al renderizar los productos del carrito', error)
+   }
 })
 
 export default viewsRouter
