@@ -59,17 +59,17 @@ cartRouter.delete('/cart/:cid/products/:pid', async (req, res)=>{
 
 cartRouter.put('/cart/:cid', async (req, res) => {
     const cartId = req.params.cid;
-    const productosActualizados = req.body;
+    const updatedProducts = req.body.productos;
 
     try {
-        const carritoActualizado = await manager.actualizarCarrito(cartId, productosActualizados);
-        res.json(carritoActualizado);
+        const updatedCart = await manager.actualizarCarrito(cartId, updatedProducts);
+        res.json(updatedCart);
     } catch (error) {
         console.log('Error al actualizar el carrito', error);
     }
 });
 
-cartRouter.put('/cart/:cid/product/:pid', async (req, res)=>{
+cartRouter.put('/cart/:cid/products/:pid', async (req, res)=>{
     const cartId = req.params.cid
     const productId = req.params.pid
     const { quantity }= req.body
@@ -86,5 +86,21 @@ cartRouter.put('/cart/:cid/product/:pid', async (req, res)=>{
     }
 })
 
+
+cartRouter.delete('/cart/:cid', async (req, res) => {
+    try {
+        const cartId = req.params.cid;
+
+        const updatedCart = await manager.vaciarCarrito(cartId);
+
+        res.json({
+            status: 'success',
+            message: 'Todos los productos del carrito fueron eliminados correctamente',
+            updatedCart,
+        });
+    } catch (error) {
+        console.error('Error al vaciar el carrito', error);
+    }
+});
 
 export default cartRouter

@@ -31,14 +31,13 @@ class CartManager{
 async agregarAlCarrito(cartId, productoId, quantity){
    try {
     const carritoId = await this.encontrarCarritoId(cartId)
-    const existeProducto = carritoId.productos.find(item=>{item.producto.toString()=== productoId})
+    const existeProducto = carritoId.productos.find(item=>item.producto.toString()=== productoId)
 
     if(existeProducto){
         existeProducto.quantity += quantity
     }else{
         carritoId.productos.push({producto: productoId, quantity})
     }
-
     await carritoId.save()
     return carritoId
    } catch (error) {
@@ -67,18 +66,27 @@ async actualizarCarrito(cartId, updatedProducts) {
             console.log('Carrito no encontrado');
         }
 
-        cart.productos = updatedProducts;
+        updatedProducts.forEach(updatedProduct => {
+            const existingProductIndex = cart.productos.findIndex(product => product.producto.toString() === updatedProduct.producto);
 
-        cart.markModified('products');
+            if (existingProductIndex !== -1) {
+                cart.productos[existingProductIndex].quantity = updatedProduct.quantity;
+            } else {
+                cart.productos.push(updatedProduct);
+            }
+        });
+        cart.markModified('productos');
 
         await cart.save();
 
         return cart;
     } catch (error) {
-        console.error('Error al actualizar el carrito', error);
-        throw error;
+        console.log('Error al actualizar el carrito en el gestor', error);
+        
     }
 }
+
+
 
 
 async actualizarCantidadProducto(cartId, productoId, newQuantity){
@@ -107,7 +115,25 @@ async actualizarCantidadProducto(cartId, productoId, newQuantity){
         }
 }
 
+async vaciarCarrito(cartId) {
+    try {
+        const cart = await cartModel.findByIdAndUpdate(
+            cartId,
+            { productos: [] },
+            { new: true }
+        )
+
+        if (!cart) {
+            console.log('Carrito no encontrado')
+        }
+
+        return cart
+    } catch (error) {
+        console.error('Error al vaciar el carrito en el gestor', error)
+    }
 }
+}
+
 
 
 export default CartManager
