@@ -59,6 +59,53 @@ async eliminarProductoCarrito(cartId, productId){
     }
 
 }
+async actualizarCarrito(cartId, updatedProducts) {
+    try {
+        const cart = await cartModel.findById(cartId);
+
+        if (!cart) {
+            console.log('Carrito no encontrado');
+        }
+
+        cart.productos = updatedProducts;
+
+        cart.markModified('products');
+
+        await cart.save();
+
+        return cart;
+    } catch (error) {
+        console.error('Error al actualizar el carrito', error);
+        throw error;
+    }
+}
+
+
+async actualizarCantidadProducto(cartId, productoId, newQuantity){
+        try {
+            if(!mongoose.Types.ObjectId.isValid(cartId)){
+                console.log(`El id es invalido: ${cartId}`)
+                return null
+            }
+            if(!mongoose.Types.ObjectId.isValid(productoId)){
+                console.log(`El id es invalido: ${productoId}`)
+                return null
+            }
+            const carrito = await cartModel.findById(cartId)
+
+            const productoEnCarrito = carrito.productos.find(p => p.producto.toString() === productoId)
+            if(!productoEnCarrito){
+                console.log('No esta el producto en este carrito')
+                return null
+            }
+
+            productoEnCarrito.quantity = newQuantity || 1
+            await carrito.save()
+            return carrito
+        } catch (error) {
+            console.log('Hubo un error al actualizar el carrito', error)
+        }
+}
 
 }
 

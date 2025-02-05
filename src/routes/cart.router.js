@@ -57,5 +57,34 @@ cartRouter.delete('/cart/:cid/products/:pid', async (req, res)=>{
 
 })
 
+cartRouter.put('/cart/:cid', async (req, res) => {
+    const cartId = req.params.cid;
+    const productosActualizados = req.body;
+
+    try {
+        const carritoActualizado = await manager.actualizarCarrito(cartId, productosActualizados);
+        res.json(carritoActualizado);
+    } catch (error) {
+        console.log('Error al actualizar el carrito', error);
+    }
+});
+
+cartRouter.put('/cart/:cid/product/:pid', async (req, res)=>{
+    const cartId = req.params.cid
+    const productId = req.params.pid
+    const { quantity }= req.body
+
+    try {
+        const carritoActualizado = await manager.actualizarCantidadProducto(cartId, productId, quantity)
+        res.json({
+            status:'Success',
+            message: 'El carrito fue actualizado exitosamente',
+            carritoActualizado
+        })
+    } catch (error) {
+        console.log('Hubo un error al actualizar el carrito', error)
+    }
+})
+
 
 export default cartRouter
